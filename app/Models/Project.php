@@ -27,11 +27,17 @@ class Project extends Model
     {
         return $this->hasMany(ProjectMember::class);
     }
+    
     public function users()
     {
-        return $this->belongsToMany(User::class, 'project_members')
-                    ->withPivot('role_in_project');
+        return $this->belongsToMany(User::class, 'project_members');
     }
+    
+    // public function users()
+    // {
+    //     return $this->belongsToMany(User::class, 'project_members')
+    //                 ->withPivot('role_in_project');
+    // }
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
