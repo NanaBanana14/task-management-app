@@ -13,6 +13,8 @@ Sistem ini dikembangkan menggunakan Laravel 10, Filament Admin, PostgreSQL, Tail
 - Spatie Laravel Permission
 - TailwindCSS (digunakan melalui Filament)
 
+---
+
 ## Instalasi dan Menjalankan Secara Lokal
 
 ### 1. Clone Repository
@@ -68,8 +70,6 @@ php artisan migrate
 
 ### 7. Instalasi Filament Admin Panel
 
-Untuk menginstall Filament, jalankan perintah berikut:
-
 ```bash
 composer require filament/filament -W
 php artisan filament:install
@@ -77,13 +77,11 @@ php artisan filament:install
 
 ### 8. Buat Akun Admin Pertama
 
-Setelah melakukan migrasi dan instalasi Filament, buat akun admin pertama dengan menjalankan perintah berikut:
-
 ```bash
 php artisan make:filament-user
 ```
 
-Ikuti instruksi untuk mengisi nama, email (misalnya `superadmin@gmail.com`), password.
+Isi nama, email (misal `superadmin@gmail.com`), dan password saat diminta.
 
 ### 9. Jalankan Server Lokal
 
@@ -91,20 +89,70 @@ Ikuti instruksi untuk mengisi nama, email (misalnya `superadmin@gmail.com`), pas
 php artisan serve
 ```
 
-Akses aplikasi di browser melalui `http://127.0.0.1:8000`
+Akses aplikasi melalui `http://127.0.0.1:8000`
+
+---
 
 ## Akses Filament Admin Panel
 
-Untuk mengakses dashboard administrasi Filament, buka:
+Untuk mengakses dashboard administrasi Filament:
 
-```plaintext
+```
 http://127.0.0.1:8000/admin/login
 ```
 
-**Contoh akun default yang bisa dibuat dengan `php artisan make:filament-user`:**
+**Contoh akun default:**
 
 - **Email**: superadmin@gmail.com
-- **Password**: [password yang di set saat membuat user]
+- **Password**: [password yang Anda set]
+
+---
+
+## Sistem Manajemen Role dan Permission
+
+Sistem ini menggunakan konsep **Role-Based Access Control (RBAC)** dengan **Spatie Laravel Permission**.
+
+### 1. Membuat Role Baru (Agar daftar role masuk ke sistem database)
+
+Gunakan perintah berikut untuk membuat role:
+
+```bash
+php artisan permission:create-role Manager
+```
+
+Buat role lain jika diperlukan:
+
+```bash
+php artisan permission:create-role Admin
+php artisan permission:create-role Super Admin
+php artisan permission:create-role Manager
+php artisan permission:create-role Staff
+```
+
+### 2. Memberikan Role ke User
+
+Gunakan Filament Admin Panel atau artisan tinker:
+
+```bash
+php artisan tinker
+```
+
+```php
+$user = App\Models\User::find(1); // Ganti ID user sesuai kebutuhan
+$user->assignRole('Manager');
+```
+
+### 3. Akses Resource Berdasarkan Role
+
+Hanya user dengan role berikut yang dapat mengakses **Project**, **Task**, dan **Comment** di admin panel:
+
+- Super Admin
+- Admin
+- Manager
+
+Akses ini diatur menggunakan **Filament Shield**.
+
+---
 
 ## Petunjuk Instalasi Berdasarkan Sistem Operasi
 
@@ -118,7 +166,7 @@ http://127.0.0.1:8000/admin/login
 ### macOS
 
 1. Install **Homebrew**
-2. Install PHP, Composer, Node.js, PostgreSQL melalui Homebrew:
+2. Install PHP, Composer, Node.js, PostgreSQL:
 
 ```bash
 brew install php composer node postgresql
@@ -130,7 +178,7 @@ brew install php composer node postgresql
 brew services start postgresql
 ```
 
-4. Ikuti langkah instalasi di atas.
+4. Ikuti langkah instalasi.
 
 ### Linux (Ubuntu/Debian)
 
@@ -147,26 +195,41 @@ sudo apt install php php-cli php-pgsql composer nodejs npm postgresql
 sudo service postgresql start
 ```
 
-3. Ikuti langkah instalasi di atas.
+3. Ikuti langkah instalasi.
+
+---
 
 ## Catatan Tambahan
 
-- Pastikan database sudah dibuat di PostgreSQL sebelum menjalankan migrasi.
-- Gunakan perintah berikut untuk reset database:
+- Pastikan database sudah dibuat di PostgreSQL sebelum migrasi.
+- Reset database jika diperlukan:
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-- Untuk membangun ulang asset Filament (TailwindCSS dan JS):
+- Untuk rebuild asset Filament (TailwindCSS dan JS):
 
 ```bash
 npm run build
 ```
 
-- Sistem ini menggunakan **Role Based Access Control (RBAC)** berbasis **Spatie Permission**, dikelola melalui **Filament Admin Panel**.
-- Manajemen User, Role, dan Permission hanya dapat diakses oleh **Super Admin/Admin** melalui panel admin.
-- TailwindCSS digunakan melalui integrasi otomatis Filament untuk styling dashboard.
+- TailwindCSS sudah otomatis terintegrasi melalui Filament.
+- Jika ada error, cek log Laravel di:
+
+```
+storage/logs/laravel.log
+```
+
+atau gunakan:
+
+```bash
+php artisan
+```
+untuk troubleshooting.
 
 ---
-Jika ada error atau masalah, cek log Laravel di `storage/logs/laravel.log` atau gunakan perintah `php artisan` untuk troubleshooting.
+
+# 📌 Catatan Penting
+
+- Role dan Permission **wajib** dikonfigurasi setelah instalasi.
