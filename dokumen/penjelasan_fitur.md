@@ -20,7 +20,7 @@ _Dibangun menggunakan Laravel 10, Filament, Spatie Permission._
 - Memberikan dan mengelola Role untuk User.
 
 **Screenshot:**
-![User Management](dokumen/image/user_management.png)
+![User Management](/dokumen/image/user_management.png)
 
 ### 2.2. Manajemen Role
 - Role yang tersedia:
@@ -34,14 +34,8 @@ _Dibangun menggunakan Laravel 10, Filament, Spatie Permission._
 - Membuat, Mengedit, Menghapus Project.
 - Input meliputi nama, deskripsi, tanggal mulai, dan tanggal selesai.
 
-**Screenshot:**
-![CRUD Project](dokumen/image/crud_project.png)
-
 ### 2.4. Manajemen Anggota Proyek (Project Member)
 - Menambahkan dan menghapus anggota dalam sebuah Project.
-
-**Screenshot:**
-![Project Member](dokumen/image/project_member.png)
 
 ### 2.5. Manajemen Tugas
 - Membuat, Mengedit, Menghapus Task dalam sebuah Project.
@@ -53,9 +47,6 @@ _Dibangun menggunakan Laravel 10, Filament, Spatie Permission._
   - Tanggal penyelesaian
 - Assign Task ke user.
 
-**Screenshot:**
-![Task Management](dokumen/image/task_management.png)
-
 ### 2.6. Manajemen Sub Task
 - Membuat SubTask dalam sebuah Task.
 - Setiap Task bisa memiliki banyak SubTask.
@@ -63,41 +54,33 @@ _Dibangun menggunakan Laravel 10, Filament, Spatie Permission._
 ### 2.7. Komentar pada Task
 - Menambahkan komentar dalam Task untuk berkomunikasi tim.
 
-**Screenshot:**
-![Comment on Task](dokumen/image/comment_task.png)
-
 ---
 
 ## 3. Fitur untuk Staff
 
 ### 3.1. Halaman Project
 - **Melihat daftar Project** di mana dirinya menjadi anggota.
-- **Mengubah status Project** (contoh: On Progress, Done).
+- **Mengubah status Project**.
 
 **Screenshot:**
-![CRUD Project](dokumen/image/crud_project.png)
+![CRUD Project](/dokumen/image/project.png)
 
 ### 3.2. Halaman Task
 - **Melihat daftar Task dan Sub Task** terkait dirinya.
-- **Mengubah status Task** (misal: Not Started → In Progress → Completed).
+- **Mengubah status Task**.
 - **Menambahkan Sub Task** baru pada Task utama.
-
-**Screenshot:**
-![Task Management](dokumen/image/task_management.png)
-
-### 3.3. Komentar pada Task
 - **Melihat daftar komentar** pada Task yang diklik.
 - **Menambah komentar** di Task.
 
 **Screenshot:**
-![Comment on Task](dokumen/image/comment_task.png)
+![Task Management](/dokumen/image/task.png)
 
-### 3.4. Halaman My Comment
+### 3.3. Halaman My Comment
 - **Melihat semua komentar** yang pernah dibuat sendiri.
 - **Membalas komentar** yang sudah ada.
 
 **Screenshot:**
-![My Comment](dokumen/image/my_comment.png)
+![My Comment](/dokumen/image/comments.png)
 
 ---
 
