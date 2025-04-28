@@ -90,23 +90,29 @@ class MyTaskResource extends Resource
                     ->columns(1)
                     ->createItemButtonLabel('Tambah Subtask'),
 
-                Forms\Components\Section::make('Comments')
+                    Forms\Components\Section::make('Comments')
                     ->schema([
                         Forms\Components\Placeholder::make('comments_list')
                             ->content(function ($record) {
                                 if (!$record) return 'No comments yet.';
-                                
+
                                 $comments = Comment::where('task_id', $record->id)
                                     ->whereNull('parent_id') 
-                                    ->with(['user', 'replies.user']) 
+                                    ->with(['user'])
                                     ->get();
-                                return view('components.comments-list', compact('comments'))->render();
+
+                                if ($comments->isEmpty()) {
+                                    return 'No comments yet.';
+                                }
+                
+                                return $comments->map(function ($comment) {
+                                    return $comment->user->name . ': ' . $comment->comments;
+                                })->implode("\n");
                             })
                             ->columnSpanFull()
                             ->disableLabel(),
                     ])
-                    ->collapsed(),
-                
+                    ->collapsed(),                
             ]);
     }
 
@@ -122,8 +128,8 @@ class MyTaskResource extends Resource
                 Tables\Columns\TextColumn::make('subTasks.title')
                     ->label('Subtasks')
                     ->searchable()
-                    ->getStateUsing(fn (Task $record) => $record->subTasks->pluck('title')->implode(', ')),
-    
+                    ->getStateUsing(fn(Task $record) => $record->subTasks->pluck('title')->implode(', ')),
+
                 // Kolom Komentar
                 Tables\Columns\TextColumn::make('comments')
                     ->label('Comments')
@@ -133,11 +139,11 @@ class MyTaskResource extends Resource
                             ->whereNull('parent_id') // hanya ambil komentar utama
                             ->with('user')
                             ->get();
-    
+
                         if ($comments->isEmpty()) {
                             return 'No comments yet.';
                         }
-    
+
                         return $comments->map(function ($comment) {
                             return '<strong>' . e($comment->user->name) . ':</strong> ' . e($comment->comments);
                         })->implode('<br>');
@@ -154,7 +160,7 @@ class MyTaskResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([]);
-    }    
+    }
 
     public static function getEloquentQuery(): Builder
     {
