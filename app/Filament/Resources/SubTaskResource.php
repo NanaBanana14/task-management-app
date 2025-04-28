@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SubTaskResource\Pages;
 use App\Models\SubTask;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -17,6 +18,11 @@ class SubTaskResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-document';
 
     protected static ?string $navigationGroup = 'Manajemen Proyek';
+
+    public static function canAccess(): bool
+    {
+        return Auth::check() && Auth::user()->hasAnyRole(['super_admin', 'Admin', 'Manager']);
+    }
 
     public static function form(Forms\Form $form): Forms\Form
     {

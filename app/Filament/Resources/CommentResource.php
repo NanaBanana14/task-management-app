@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CommentResource\Pages;
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -18,6 +19,12 @@ class CommentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Manajemen Proyek';
+
+    public static function canAccess(): bool
+    {
+        return Auth::check() && Auth::user()->hasAnyRole(['super_admin', 'Admin', 'Manager']);
+    }
+
 
     public static function form(Form $form): Form
     {

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
@@ -17,6 +18,11 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function canAccess(): bool
+    {
+        return Auth::check() && Auth::user()->hasAnyRole(['super_admin', 'Admin',]);
+    }
 
     public static function form(Form $form): Form
     {

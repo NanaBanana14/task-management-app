@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\Resource;
@@ -18,6 +19,11 @@ class ProjectResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
     protected static ?string $navigationGroup = 'Manajemen Proyek';
+
+    public static function canAccess(): bool
+    {
+        return Auth::check() && Auth::user()->hasAnyRole(['super_admin', 'Admin', 'Manager']);
+    }
 
     public static function form(Forms\Form $form): Forms\Form
     {
