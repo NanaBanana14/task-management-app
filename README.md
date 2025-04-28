@@ -117,12 +117,6 @@ Sistem ini menggunakan konsep **Role-Based Access Control (RBAC)** dengan **Spat
 Gunakan perintah berikut untuk membuat role:
 
 ```bash
-php artisan permission:create-role Manager
-```
-
-Buat role lain jika diperlukan:
-
-```bash
 php artisan permission:create-role Admin
 php artisan permission:create-role Super Admin
 php artisan permission:create-role Manager
