@@ -130,13 +130,11 @@ class MyTaskResource extends Resource
                     ->searchable()
                     ->getStateUsing(fn(Task $record) => $record->subTasks->pluck('title')->implode(', ')),
 
-                // Kolom Komentar
                 Tables\Columns\TextColumn::make('comments')
                     ->label('Comments')
                     ->getStateUsing(function (Task $record) {
-                        // Ambil komentar yang terkait dengan task ini
                         $comments = Comment::where('task_id', $record->id)
-                            ->whereNull('parent_id') // hanya ambil komentar utama
+                            ->whereNull('parent_id')
                             ->with('user')
                             ->get();
 
