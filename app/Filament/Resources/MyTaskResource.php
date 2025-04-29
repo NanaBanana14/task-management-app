@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Auth;
 class MyTaskResource extends Resource
 {
     protected static ?string $model = Task::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'My Project & Task';
     protected static ?string $navigationLabel = 'Task + Sub-Task + Comments';
@@ -75,8 +74,7 @@ class MyTaskResource extends Resource
                 Forms\Components\Repeater::make('subTasks')
                     ->relationship('subTasks')
                     ->schema([
-                        Forms\Components\TextInput::make('title')
-                            ->required(),
+                        Forms\Components\TextInput::make('title')->required(),
                         Forms\Components\Select::make('status')
                             ->options([
                                 'todo' => 'To Do',
@@ -84,35 +82,36 @@ class MyTaskResource extends Resource
                                 'done' => 'Done',
                             ])
                             ->required(),
-                        Forms\Components\DatePicker::make('due_date')
-                            ->required(),
+                        Forms\Components\DatePicker::make('due_date')->required(),
                     ])
                     ->columns(1)
                     ->createItemButtonLabel('Tambah Subtask'),
 
-                    Forms\Components\Section::make('Comments')
+                Forms\Components\Section::make('Comments')
                     ->schema([
                         Forms\Components\Placeholder::make('comments_list')
                             ->content(function ($record) {
                                 if (!$record) return 'No comments yet.';
 
                                 $comments = Comment::where('task_id', $record->id)
-                                    ->whereNull('parent_id') 
-                                    ->with(['user'])
+                                    ->whereNull('parent_id')
+                                    ->with(['user', 'replies.user'])
                                     ->get();
 
-                                if ($comments->isEmpty()) {
-                                    return 'No comments yet.';
-                                }
-                
+                                if ($comments->isEmpty()) return 'No comments yet.';
+
                                 return $comments->map(function ($comment) {
-                                    return $comment->user->name . ': ' . $comment->comments;
-                                })->implode("\n");
+                                    $output = $comment->user->name . ': ' . $comment->comments;
+                                    foreach ($comment->replies as $reply) {
+                                        $output .= "\n ↳ " . $reply->user->name . ': ' . $reply->comments;
+                                    }
+                                    return $output;
+                                })->implode("\n\n");
                             })
                             ->columnSpanFull()
                             ->disableLabel(),
                     ])
-                    ->collapsed(),                
+                    ->collapsed(),
             ]);
     }
 
@@ -135,7 +134,7 @@ class MyTaskResource extends Resource
                     ->getStateUsing(function (Task $record) {
                         $comments = Comment::where('task_id', $record->id)
                             ->whereNull('parent_id')
-                            ->with('user')
+                            ->with(['user', 'replies.user'])
                             ->get();
 
                         if ($comments->isEmpty()) {
@@ -143,8 +142,12 @@ class MyTaskResource extends Resource
                         }
 
                         return $comments->map(function ($comment) {
-                            return '<strong>' . e($comment->user->name) . ':</strong> ' . e($comment->comments);
-                        })->implode('<br>');
+                            $html = '<strong>' . e($comment->user->name) . ':</strong> ' . e($comment->comments);
+                            foreach ($comment->replies as $reply) {
+                                $html .= '<br><span style="margin-left: 1rem;">↳ <strong>' . e($reply->user->name) . ':</strong> ' . e($reply->comments) . '</span>';
+                            }
+                            return $html;
+                        })->implode('<br><br>');
                     })
                     ->html()
                     ->sortable(),
