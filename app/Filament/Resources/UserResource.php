@@ -24,6 +24,21 @@ class UserResource extends Resource
         return Auth::check() && Auth::user()->hasAnyRole(['super_admin', 'Admin',]);
     }
 
+    public static function canCreate(): bool
+    {
+        return Auth::user()?->hasRole('super_admin');
+    }
+
+    public static function canEdit($record): bool
+    {
+        return Auth::user()?->hasRole('super_admin');
+    }
+
+    public static function canDelete($record): bool
+    {
+        return Auth::user()?->hasRole('super_admin');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -85,14 +100,18 @@ class UserResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->actions(
+                Auth::user()?->hasRole('super_admin')
+                    ? [Tables\Actions\EditAction::make()]
+                    : []
+            )
+            ->bulkActions(
+                Auth::user()?->hasRole('super_admin')
+                    ? [Tables\Actions\BulkActionGroup::make([
+                        Tables\Actions\DeleteBulkAction::make(),
+                    ])]
+                    : []
+            );
     }
 
     public static function getRelations(): array
