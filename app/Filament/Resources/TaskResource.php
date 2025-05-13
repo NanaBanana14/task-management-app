@@ -83,8 +83,10 @@ class TaskResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ])
+            ->poll(3000);
     }
+
     public static function tableColumns(): array
     {
         return [
@@ -127,3 +129,4 @@ class TaskResource extends Resource
         ];
     }
 }
+
