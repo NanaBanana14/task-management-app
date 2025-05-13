@@ -23,6 +23,15 @@ class Task extends Model
         'due_date' => 'datetime',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($task) {
+            $task->subTasks()->delete();
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

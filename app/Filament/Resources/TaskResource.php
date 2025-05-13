@@ -76,40 +76,40 @@ class TaskResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('priority')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('due_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('project_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                // Add filters here if needed
-            ])
+            ->columns(self::tableColumns())
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                // Remove BulkAction for delete if not needed
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+    public static function tableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('title')->searchable(),
+            Tables\Columns\TextColumn::make('status')->searchable(),
+            Tables\Columns\TextColumn::make('priority')->searchable(),
+            Tables\Columns\TextColumn::make('due_date')->date()->sortable(),
+            Tables\Columns\TextColumn::make('user.name')
+                ->label('User')
+                ->numeric()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('project.name')
+                ->label('Project')
+                ->numeric()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('updated_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ];
     }
 
     public static function getRelations(): array

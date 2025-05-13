@@ -7,7 +7,6 @@ use App\Models\Task;
 
 class TaskStatusReportWidget extends Widget
 {
-    // Menentukan view yang digunakan untuk widget
     protected static string $view = 'filament.widgets.task-status-report-widget';
 
     public $todoCount;
