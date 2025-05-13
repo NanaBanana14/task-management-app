@@ -1,26 +1,26 @@
 <x-filament::widget>
-    <x-filament::card wire:poll.5s>
+    <x-filament::card>
         <div class="text-lg font-bold mb-4">Task Summary</div>
 
         <div class="flex flex-wrap gap-2 justify-center">
             <div class="p-6 rounded-xl shadow text-center">
                 <div class="text-sm">Total</div>
-                <div class="text-3xl font-bold">{{ $total }}</div>
+                <div class="text-3xl font-bold" wire:poll.5s="getTotalTasks">{{ $total }}</div>
             </div>
 
             <div class="p-6 rounded-xl shadow text-center">
-                <div class="text-sm ">To Do</div>
-                <div class="text-3xl font-bold">{{ $todo }}</div>
+                <div class="text-sm">To Do</div>
+                <div class="text-3xl font-bold" wire:poll.5s="getToDoTasks">{{ $todo }}</div>
             </div>
 
             <div class="p-6 rounded-xl shadow text-center">
                 <div class="text-sm">In Progress</div>
-                <div class="text-3xl font-bold ">{{ $inProgress }}</div>
+                <div class="text-3xl font-bold" wire:poll.5s="getInProgressTasks">{{ $inProgress }}</div>
             </div>
 
             <div class="p-6 rounded-xl shadow text-center">
-                <div class="text-sm ">Done</div>
-                <div class="text-3xl font-bold ">{{ $done }}</div>
+                <div class="text-sm">Done</div>
+                <div class="text-3xl font-bold" wire:poll.5s="getDoneTasks">{{ $done }}</div>
             </div>
         </div>
     </x-filament::card>

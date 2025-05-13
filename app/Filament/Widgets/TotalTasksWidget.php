@@ -9,18 +9,35 @@ class TotalTasksWidget extends Widget
 {
     protected static string $view = 'filament.widgets.total-tasks-widget';
 
-    protected int|string|array $columnSpan = 'full';
+    protected static bool $isLazy = false;
+
+    public function getTotalTasks()
+    {
+        return Task::count();
+    }
+
+    public function getToDoTasks()
+    {
+        return Task::where('status', 'todo')->count();
+    }
+
+    public function getInProgressTasks()
+    {
+        return Task::where('status', 'in_progress')->count();
+    }
+
+    public function getDoneTasks()
+    {
+        return Task::where('status', 'done')->count();
+    }
 
     protected function getViewData(): array
     {
         return [
-            'total' => Task::count(),
-            'todo' => Task::where('status', 'todo')->count(),
-            'inProgress' => Task::where('status', 'in_progress')->count(),
-            'done' => Task::where('status', 'done')->count(),
+            'total' => $this->getTotalTasks(),
+            'todo' => $this->getToDoTasks(),
+            'inProgress' => $this->getInProgressTasks(),
+            'done' => $this->getDoneTasks(),
         ];
     }
-
-
-    protected static bool $isLazy = false; // Agar langsung load
 }
