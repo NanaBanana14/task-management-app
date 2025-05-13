@@ -26,4 +26,5 @@ class ListTasks extends ListRecords
             TaskListSecondary::class,
         ];
     }
+
 }

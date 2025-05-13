@@ -14,7 +14,6 @@ class TaskListSecondary extends BaseWidget
 {
     protected static bool $isLazy = false;
     protected int|string|array $columnSpan = 'full';
-
     protected function getTableQuery(): Builder|Relation|null
     {
         return Task::query()->with(['user', 'project']);

@@ -11,6 +11,8 @@ class TotalTasksWidget extends Widget
 
     protected static bool $isLazy = false;
 
+    protected int|string|array $columnSpan = 'full';
+
     public function getTotalTasks()
     {
         return Task::count();
@@ -31,6 +33,21 @@ class TotalTasksWidget extends Widget
         return Task::where('status', 'done')->count();
     }
 
+    public function getLowPriorityTasks()
+    {
+        return Task::where('priority', 'low')->count();
+    }
+
+    public function getMediumPriorityTasks()
+    {
+        return Task::where('priority', 'medium')->count();
+    }
+
+    public function getHighPriorityTasks()
+    {
+        return Task::where('priority', 'high')->count();
+    }
+
     protected function getViewData(): array
     {
         return [
@@ -38,6 +55,9 @@ class TotalTasksWidget extends Widget
             'todo' => $this->getToDoTasks(),
             'inProgress' => $this->getInProgressTasks(),
             'done' => $this->getDoneTasks(),
+            'low' => $this->getLowPriorityTasks(),
+            'medium' => $this->getMediumPriorityTasks(),
+            'high' => $this->getHighPriorityTasks(),
         ];
     }
 }
